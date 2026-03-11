@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="style.css">
 
 </head>
-
 <body>
 
 <div id="toast" class="toast"></div>
 
+<!-- NAVBAR -->
 <div class="navbar">
 
 <div class="logo">◻</div>
@@ -24,28 +24,24 @@
 <span>Robux</span>
 </div>
 
-<input class="search"
-placeholder="Search"
-onkeypress="if(event.key==='Enter'){searchUser(this.value)}">
+<input class="search" placeholder="Search Roblox user" id="searchInput">
+
+<div id="searchResultsDropdown" class="dropdown"></div>
 
 <div class="user">
 <div class="robux">
-
 <div class="robux-icon">
 <div class="robux-hole"></div>
 </div>
-
 <span id="balance">3241096</span>
-
 </div>
 </div>
 
 </div>
 
+<!-- CENTER POPUP -->
 <div class="container">
-
 <div class="popup">
-
 <h3>Send Group Payout</h3>
 
 <input id="username" placeholder="Username">
@@ -55,11 +51,10 @@ onkeypress="if(event.key==='Enter'){searchUser(this.value)}">
 <button class="cancel" onclick="clearFields()">Cancel</button>
 
 <div id="result"></div>
-
+</div>
 </div>
 
-</div>
-
+<!-- FOOTER -->
 <div class="footer">
 <a href="#">Parents</a>
 <a href="#">Gift Cards</a>
@@ -73,6 +68,5 @@ onkeypress="if(event.key==='Enter'){searchUser(this.value)}">
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
