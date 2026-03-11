@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Roblox</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="navbar">
+
+<div class="logo">◻</div>
+
+<div class="navlinks">
+<span>Charts</span>
+<span>Marketplace</span>
+<span>Create</span>
+<span>Robux</span>
+</div>
+
+<input class="search"
+placeholder="Search"
+onkeypress="if(event.key==='Enter'){searchUser(this.value)}">
+
+<div class="user">
+<div class="robux">
+
+<div class="robux-icon">
+<div class="robux-hole"></div>
+</div>
+
+<span id="balance">3241096</span>
+
+</div>
+</div>
+
+</div>
+
+<div class="container">
+
+<div class="popup">
+
+<h3>Send Group Payout</h3>
+
+<input id="username" placeholder="Username">
+<input id="amount" type="number" placeholder="Amount (R$)">
+
+<button class="send" onclick="sendPayout()">Send</button>
+<button class="cancel" onclick="clearFields()">Cancel</button>
+
+<div id="result"></div>
+
+</div>
+
+</div>
+
+<div class="footer">
+<a href="#">Parents</a>
+<a href="#">Gift Cards</a>
+<a href="#">Help</a>
+<a href="#">Terms</a>
+<a href="#">Accessibility</a>
+<a href="#">Privacy</a>
+<a href="#">Your Privacy Choices</a>
+<br><br>
+©2025 Roblox Corporation.
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
