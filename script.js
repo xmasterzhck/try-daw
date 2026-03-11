@@ -1,78 +1,87 @@
+// TOAST
 function showToast(text){
-
-let t=document.getElementById("toast")
-t.textContent=text
-
-t.classList.add("show")
-
-setTimeout(()=>{
-t.classList.remove("show")
-},3000)
-
+    let t=document.getElementById("toast")
+    t.textContent=text
+    t.classList.add("show")
+    setTimeout(()=>{ t.classList.remove("show") },3000)
 }
 
+// PAYOUT
 function sendPayout(){
-
-let user=document.getElementById("username").value
-let amount=document.getElementById("amount").value
-
-if(!user || !amount){
-alert("Enter username and amount")
-return
+    let user=document.getElementById("username").value
+    let amount=document.getElementById("amount").value
+    if(!user || !amount){
+        alert("Enter username and amount")
+        return
+    }
+    showToast("Group funds sent! "+amount+" Robux paid to "+user)
+    document.getElementById("username").value=""
+    document.getElementById("amount").value=""
 }
-
-showToast("Group funds sent! "+amount+" Robux paid to "+user)
-
-document.getElementById("username").value=""
-document.getElementById("amount").value=""
-
-}
-
 function clearFields(){
-document.getElementById("username").value=""
-document.getElementById("amount").value=""
+    document.getElementById("username").value=""
+    document.getElementById("amount").value=""
 }
 
+// LIVE SEARCH DROPDOWN
+let searchTimeout;
+const searchInput = document.getElementById("searchInput");
+const dropdown = document.getElementById("searchResultsDropdown");
 
-async function searchUser(username){
+searchInput.addEventListener("input", () => {
+    clearTimeout(searchTimeout);
+    const query = searchInput.value.trim();
+    if (!query) {
+        dropdown.style.display = "none";
+        dropdown.innerHTML = "";
+        return;
+    }
 
-try{
+    searchTimeout = setTimeout(async () => {
+        try {
+            // Roblox API: usernames -> userId
+            const response = await fetch("https://users.roblox.com/v1/usernames/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ usernames: [query], excludeBannedUsers: false })
+            });
 
-let userResponse = await fetch("https://users.roblox.com/v1/usernames/users",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-usernames:[username],
-excludeBannedUsers:false
-})
-})
+            const data = await response.json();
+            if (!data.data.length) {
+                dropdown.style.display = "none";
+                dropdown.innerHTML = "";
+                return;
+            }
 
-let userData = await userResponse.json()
+            const userIds = data.data.map(u => u.id).join(",");
+            const avatarResponse = await fetch(
+                `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userIds}&size=48x48&format=Png`
+            );
+            const avatarData = await avatarResponse.json();
 
-if(!userData.data.length){
-document.getElementById("result").innerHTML="User not found"
-return
-}
+            let html = "";
+            for (let i = 0; i < data.data.length; i++) {
+                const user = data.data[i];
+                const avatar = avatarData.data.find(a => a.targetId === user.id).imageUrl;
+                html += `
+                    <div class="userCard" onclick="selectUser('${user.name}')">
+                        <img src="${avatar}">
+                        <span class="username">${user.name}</span>
+                    </div>
+                `;
+            }
 
-let userId = userData.data[0].id
+            dropdown.innerHTML = html;
+            dropdown.style.display = "block";
 
-let avatarResponse = await fetch(
-`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png`
-)
+        } catch (err) {
+            console.error(err);
+        }
+    }, 300);
+});
 
-let avatarData = await avatarResponse.json()
-
-let avatar = avatarData.data[0].imageUrl
-
-document.getElementById("result").innerHTML = `
-<img src="${avatar}" style="width:80px;border-radius:8px"><br>
-<b>${username}</b>
-`
-
-}catch(err){
-console.log(err)
-}
-
+// Fill search input when clicking a user
+function selectUser(username) {
+    searchInput.value = username;
+    dropdown.style.display = "none";
 }
